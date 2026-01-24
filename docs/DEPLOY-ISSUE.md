@@ -58,7 +58,22 @@ if (isSandbox) {
     'latest'
   );
 }
+
+// 依存関係設定（イメージビルド完了後にRuntime作成）
+if (containerImageBuild) {
+  runtime.node.addDependency(containerImageBuild);
+}
 ```
+
+### 依存関係設定の重要性
+
+`runtime.node.addDependency(containerImageBuild)` により、CloudFormation が以下の順序でリソースを作成する：
+
+1. ContainerImageBuild（CodeBuild で ARM64 イメージをビルド）
+2. ECR にイメージがプッシュされる
+3. AgentCore Runtime が ECR イメージを参照して作成される
+
+この設定がないと、Runtime 作成時にまだイメージが存在せずエラーになる。
 
 ## 注意事項
 
