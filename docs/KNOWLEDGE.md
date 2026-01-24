@@ -125,7 +125,7 @@ data: {"type": "text", "data": "テキストチャンク"}
 data: {"type": "tool_use", "data": "ツール名"}
 data: {"type": "markdown", "data": "生成されたマークダウン"}
 data: {"type": "error", "error": "エラーメッセージ"}
-data: [DONE]
+data: {"type": "done"}
 ```
 
 ### ツール駆動型のマークダウン出力

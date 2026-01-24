@@ -303,7 +303,7 @@ data: {"type": "tool_use", "data": "output_slide"}
 
 data: {"type": "markdown", "data": "---\nmarp: true\n..."}
 
-data: [DONE]
+data: {"type": "done"}
 ```
 
 ---

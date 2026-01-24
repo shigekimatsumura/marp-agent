@@ -132,22 +132,24 @@ k.gotoさんにより、CDK hotswapがAgentCore Runtimeに対応した。
 | 項目 | 状態 | 備考 |
 |------|------|------|
 | package.json overrides追加 | ✅完了 | toolkit-lib 1.14.0 |
-| Amplify Console設定 | 🔄進行中 | カスタムビルドイメージ設定が必要 |
 | GitHubリポジトリ連携 | ✅完了 | mainブランチ連携済み |
 | 環境変数設定 | ✅完了 | TAVILY_API_KEY設定済み |
-| サービスロール作成 | 🔄進行中 | AmplifyServiceRole-marp-agent作成済み、ポリシーアタッチが必要 |
-| 本番デプロイ実行 | ⬜未着手 | サービスロール設定後に再実行 |
+| サービスロール作成 | ✅完了 | AmplifyServiceRole-marp-agent + AdministratorAccess-Amplify |
+| カスタムビルドイメージ | 🔄進行中 | `amazonlinux-x86_64-standard:5.0` を設定中 |
+| 本番デプロイ実行 | ⬜未着手 | カスタムビルドイメージ設定後に再実行 |
 | 本番動作確認 | ⬜未着手 | E2Eテスト |
 
-### 本番デプロイで発生した問題
+### 本番デプロイで発生した問題と解決
 
-1. **CDKAssetPublishError**: サービスロール権限不足
+1. **CDKAssetPublishError**: サービスロール権限不足 → ✅解決
    - デフォルトの`AmplifySSRLoggingRole`はロギング専用で権限不足
    - `AmplifyServiceRole-marp-agent`を新規作成
-   - `AdministratorAccess-Amplify`ポリシーのアタッチが必要
+   - `AdministratorAccess-Amplify`ポリシーをアタッチ済み
 
-2. **カスタムビルドイメージ**: Docker対応が必要
+2. **カスタムビルドイメージ**: Docker対応が必要 → 🔄設定中
+   - デフォルトのビルドイメージにはDockerが含まれていない
    - イメージ: `public.ecr.aws/codebuild/amazonlinux-x86_64-standard:5.0`
+   - Amplify Console → Build settings → Build image settings で設定
 
 ### Step 5 詳細進捗
 
@@ -251,6 +253,8 @@ marp-agent/
 │   │   └── SlidePreview.tsx     # スライドプレビュー ✅
 │   ├── hooks/
 │   │   └── useAgentCore.ts      # AgentCore API呼び出しフック ✅
+│   ├── themes/
+│   │   └── border.css           # カスタムテーマ（プレビュー用） ✅
 │   ├── index.css                # Tailwind + カスタムカラー ✅
 │   └── main.tsx                 # Amplify初期化 + I18n ✅
 ├── index.html                   # HTMLテンプレート ✅
@@ -301,20 +305,20 @@ marp-agent/
 3. ✅ 機能実装（generate, edit, export_pdf）
 4. ✅ 単体テスト実行・成功
 
-### Step 3: インフラ構築 🔄
-1. AgentCore Runtime CDK定義（amplify/agent/resource.ts）
-2. Cognito認証統合
-3. Bedrockモデル権限設定
+### Step 3: インフラ構築 ✅
+1. ✅ AgentCore Runtime CDK定義（amplify/agent/resource.ts）
+2. ✅ Cognito認証統合（JWT認証）
+3. ✅ Bedrockモデル権限設定（inference-profile対応）
 
-### Step 4: フロントエンド実装
-1. チャットUI（タブ切り替え）
-2. SSEストリーミング対応
-3. スライドプレビューコンポーネント
-4. PDFダウンロード機能
+### Step 4: フロントエンド実装 ✅
+1. ✅ チャットUI（タブ切り替え）
+2. ✅ SSEストリーミング対応
+3. ✅ スライドプレビューコンポーネント
+4. ✅ PDFダウンロード機能
 
-### Step 5: 統合・テスト
-1. ローカルE2Eテスト
-2. 本番デプロイ（Amplify Console）
+### Step 5: 統合・テスト ✅
+1. ✅ ローカルE2Eテスト
+2. 🔄 本番デプロイ（Amplify Console）← Step 6へ移行
 
 ## 決定済み事項
 
