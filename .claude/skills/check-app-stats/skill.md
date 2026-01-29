@@ -115,11 +115,23 @@ cat /tmp/all_cost.json | jq -r '
 ' | awk -F'\t' '{printf "%s: $%.2f\n", $1, $2}'
 ```
 
+### 5. Bedrockコスト（main/kag内訳・推定）
+
+Bedrockコストは環境別に分かれていないため、invocation数の割合で按分して推定する。
+
+**計算方法**:
+1. 手順2で取得した週間invocation数の合計を算出（main合計、kag合計）
+2. 手順4で取得した週間Bedrockコスト合計を算出
+3. 各環境のコストを按分計算:
+   - main推定コスト = 週間コスト × (main invocation数 / 合計invocation数)
+   - kag推定コスト = 週間コスト × (kag invocation数 / 合計invocation数)
+
 ## 出力フォーマット
 
 結果は以下の形式でまとめること：
 
 1. **Cognitoユーザー数**: 環境ごとのユーザー数テーブル
-2. **日次invocation数**: 過去7日間の日別テーブル（簡易グラフ付き）
+2. **日次invocation数**: 過去7日間の日別テーブル（main/kag別、簡易グラフ付き）
 3. **時間別invocation数**: 直近24時間のJST表示テーブル（簡易グラフ付き）
 4. **Bedrockコスト（日別）**: 過去7日間の日別コストテーブル（簡易グラフ付き）
+5. **Bedrockコスト（環境別内訳）**: invocation数で按分した推定コスト（週間・月間）
