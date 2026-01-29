@@ -138,11 +138,43 @@ echo "  合計: $TOTAL_KAG 回"
 echo ""
 
 echo "⏰ 時間別invocation数（直近24時間・JST）"
-echo "[main - 上位5時間帯]"
-jq -r '[.results[] | {hour: (.[] | select(.field == "hour_jst") | .value), count: (.[] | select(.field == "count") | .value | tonumber)}] | sort_by(-.count) | .[0:5][] | "  \(.hour): \(.count) 回"' "$OUTPUT_DIR/hourly_main.json"
 echo ""
-echo "[kag - 上位5時間帯]"
-jq -r '[.results[] | {hour: (.[] | select(.field == "hour_jst") | .value), count: (.[] | select(.field == "count") | .value | tonumber)}] | sort_by(-.count) | .[0:5][] | "  \(.hour): \(.count) 回"' "$OUTPUT_DIR/hourly_kag.json"
+echo "        [main]                              [kag]"
+echo "  時刻  |  グラフ              | 回数    |  グラフ              | 回数"
+echo "  ------|----------------------|---------|----------------------|------"
+
+# main/kagのデータをJSON オブジェクト（時刻→回数）として取得
+MAIN_DATA=$(jq -r '[.results[] | {key: (.[] | select(.field == "hour_jst") | .value[11:13]), value: (.[] | select(.field == "count") | .value | tonumber)}] | from_entries' "$OUTPUT_DIR/hourly_main.json" 2>/dev/null || echo "{}")
+KAG_DATA=$(jq -r '[.results[] | {key: (.[] | select(.field == "hour_jst") | .value[11:13]), value: (.[] | select(.field == "count") | .value | tonumber)}] | from_entries' "$OUTPUT_DIR/hourly_kag.json" 2>/dev/null || echo "{}")
+
+# 現在時刻（JST）から24時間分を逆順で生成
+CURRENT_HOUR=$(TZ=Asia/Tokyo date +%H)
+for i in $(seq 23 -1 0); do
+  HOUR=$(( (CURRENT_HOUR - i + 24) % 24 ))
+  HOUR_STR=$(printf "%02d" $HOUR)
+
+  # mainのカウント取得
+  MAIN_COUNT=$(echo "$MAIN_DATA" | jq -r ".\"$HOUR_STR\" // 0")
+  MAIN_BARS=$(( MAIN_COUNT / 2 ))
+  [ $MAIN_BARS -gt 20 ] && MAIN_BARS=20
+  if [ $MAIN_BARS -gt 0 ]; then
+    MAIN_BAR=$(printf '█%.0s' $(seq 1 $MAIN_BARS))
+  else
+    MAIN_BAR=""
+  fi
+
+  # kagのカウント取得
+  KAG_COUNT=$(echo "$KAG_DATA" | jq -r ".\"$HOUR_STR\" // 0")
+  KAG_BARS=$(( KAG_COUNT / 2 ))
+  [ $KAG_BARS -gt 20 ] && KAG_BARS=20
+  if [ $KAG_BARS -gt 0 ]; then
+    KAG_BAR=$(printf '█%.0s' $(seq 1 $KAG_BARS))
+  else
+    KAG_BAR=""
+  fi
+
+  printf "  %s:00 | %-20s | %3d     | %-20s | %3d\n" "$HOUR_STR" "$MAIN_BAR" "$MAIN_COUNT" "$KAG_BAR" "$KAG_COUNT"
+done
 echo ""
 
 echo "💰 Bedrockコスト（過去7日間・日別）"
@@ -187,7 +219,7 @@ echo "✅ 完了！"
 
 1. **Cognitoユーザー数**: 環境ごとのユーザー数
 2. **日次invocation数**: 過去7日間の日別回数（main/kag別）
-3. **時間別invocation数**: 直近24時間の上位5時間帯
+3. **時間別invocation数**: 直近24時間の全時間帯（ASCIIバーグラフ）
 4. **Bedrockコスト（日別）**: 過去7日間の日別コスト
 5. **Bedrockコスト（環境別内訳）**: invocation数で按分した推定コスト（週間・月間）
 
