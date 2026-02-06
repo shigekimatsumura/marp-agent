@@ -26,7 +26,7 @@ export class SharedSlidesConstruct extends Construct {
     // - パブリックアクセスブロック有効（CloudFront経由のみアクセス可能）
     // - 7日後に自動削除（Lifecycle Rule）
     this.bucket = new s3.Bucket(this, 'Bucket', {
-      bucketName: `marp-shared-slides-new-${nameSuffix}`,
+      bucketName: `marp-agent-2026`,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
