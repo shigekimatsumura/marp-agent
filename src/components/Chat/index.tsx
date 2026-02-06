@@ -12,7 +12,7 @@ export function Chat({ onMarkdownGenerated, currentMarkdown, inputRef, editPromp
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [status, setStatus] = useState('');
-  const [modelType, setModelType] = useState<ModelType>('claude');
+  const [modelType, setModelType] = useState<ModelType>('nova');
   const initializedRef = useRef(false);
 
   const { startTipRotation, stopTipRotation } = useTipRotation();

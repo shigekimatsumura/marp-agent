@@ -21,7 +21,7 @@ export function ChatInput({
   inputRef,
   onSubmit,
 }: ChatInputProps) {
-  const modelLabel = modelType === 'claude' ? 'Sonnet' : modelType === 'kimi' ? 'Kimi' : 'Opus';
+  const modelLabel = modelType === 'nova' ? 'Sonnet' : modelType === 'kimi' ? 'Kimi' : 'Opus';
 
   return (
     <form onSubmit={onSubmit} className="border-t px-6 py-4">
