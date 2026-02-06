@@ -7,28 +7,28 @@ MAX_RETRY_COUNT = 5  # ツール名破損時の最大リトライ回数
 
 def get_model_config(model_type: str = "nova") -> dict:
     """モデルタイプに応じた設定を返す"""
-    if model_type == "kimi":
+    if model_type == "nova":
         # Kimi K2 Thinking（Moonshot AI）
         # - クロスリージョン推論なし
         # - cache_prompt/cache_tools非対応
         return {
-            "model_id": "moonshot.kimi-k2-thinking",
+            "model_id": "amazon.nova-lite-v1:0",
             "cache_prompt": None,
             "cache_tools": None,
         }
-    elif model_type == "opus":
+    elif model_type == "nova":
         # Claude Opus 4.6（リリース前はエラー返却）
         return {
             "model_id": "amazon.nova-lite-v1:0",
-            "cache_prompt": "default",
-            "cache_tools": "default",
+            "cache_prompt":  None,
+            "cache_tools": None,
         }
     else:
         # Claude Sonnet 4.5（デフォルト）
         return {
             "model_id": "amazon.nova-lite-v1:0",
-            "cache_prompt": "default",
-            "cache_tools": "default",
+            "cache_prompt": None,
+            "cache_tools": None,
         }
 
 
