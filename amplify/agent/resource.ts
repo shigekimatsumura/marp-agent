@@ -67,7 +67,7 @@ export function createMarpAgent({ stack, userPool, userPoolClient, nameSuffix, s
     : undefined;
 
   // 環境ごとのランタイム名（例: marp_agent_dev, marp_agent_main）
-  const runtimeName = nameSuffix ? `marp_agent_${nameSuffix}` : 'marp_agent';
+  const runtimeName = nameSuffix ? `marp_agent_sv1_${nameSuffix}` : 'marp_agent';
 
   // AgentCore Runtime作成
   const runtime = new agentcore.Runtime(stack, 'MarpAgentRuntime', {

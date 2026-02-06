@@ -5,7 +5,7 @@ VALID_TOOL_NAMES = {"web_search", "output_slide", "generate_tweet_url"}
 MAX_RETRY_COUNT = 5  # ツール名破損時の最大リトライ回数
 
 
-def get_model_config(model_type: str = "claude") -> dict:
+def get_model_config(model_type: str = "nova") -> dict:
     """モデルタイプに応じた設定を返す"""
     if model_type == "kimi":
         # Kimi K2 Thinking（Moonshot AI）
@@ -19,14 +19,14 @@ def get_model_config(model_type: str = "claude") -> dict:
     elif model_type == "opus":
         # Claude Opus 4.6（リリース前はエラー返却）
         return {
-            "model_id": "us.anthropic.claude-opus-4-6-v1",
+            "model_id": "amazon.nova-lite-v1:0",
             "cache_prompt": "default",
             "cache_tools": "default",
         }
     else:
         # Claude Sonnet 4.5（デフォルト）
         return {
-            "model_id": "us.anthropic.claude-sonnet-4-5-20250929-v1:0",
+            "model_id": "amazon.nova-lite-v1:0",
             "cache_prompt": "default",
             "cache_tools": "default",
         }

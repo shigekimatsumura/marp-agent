@@ -16,7 +16,7 @@ export interface AgentCoreCallbacks {
   onComplete: () => void;
 }
 
-export type ModelType = 'claude' | 'kimi' | 'opus';
+export type ModelType = 'nova' | 'kimi' | 'opus';
 
 /**
  * AgentCore APIのベースURL・認証情報を取得
@@ -92,7 +92,7 @@ export async function invokeAgent(
   currentMarkdown: string,
   callbacks: AgentCoreCallbacks,
   sessionId?: string,
-  modelType: ModelType = 'claude'
+  modelType: ModelType = 'nova'
 ): Promise<void> {
   try {
     const { url, accessToken } = await getAgentCoreConfig();

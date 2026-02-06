@@ -1,4 +1,4 @@
-export type ModelType = 'claude' | 'kimi' | 'opus';
+export type ModelType = 'nova' | 'kimi' | 'opus';
 
 export interface Message {
   role: 'user' | 'assistant';
